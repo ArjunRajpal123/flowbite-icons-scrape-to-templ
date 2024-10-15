@@ -18,28 +18,32 @@ def parse_svg_files(directory):
                         if "class=" not in first_svg_tag:
                             # If class attribute not present in the first <svg> tag, add it
                             svg_content = svg_content.replace(
-                                first_svg_tag, f"{first_svg_tag[:-1]} {class_attr}>", 1
+                                first_svg_tag, f"{
+                                    first_svg_tag[:-1]} {class_attr}>", 1
                             )
                         else:
                             # If class attribute already present, insert 'class={{class}}' after it
                             svg_content = svg_content.replace(
-                                first_svg_tag, f"{first_svg_tag[:-1]} {class_attr} ", 1
+                                first_svg_tag, f"{
+                                    first_svg_tag[:-1]} {class_attr} ", 1
                             )
-                    package_name = "icons"
-                    class_name = os.path.splitext(file)[0].capitalize()
+                    package_name = "flowbite"
+                    class_name = ''.join(word.capitalize() for word in os.path.splitext(
+                        file)[0].split('-'))
                     templ_content = f"""package {package_name}
                         templ {class_name}(class string) {{
                         {svg_content}
-                        }}"""
+                    }}"""
 
-                    target_dir = os.path.join("./scraped/solid")
+                    target_dir = os.path.join("./scraped/out2")
                     os.makedirs(target_dir, exist_ok=True)
 
-                    templ_path = os.path.join(target_dir, f"{class_name}.templ")
+                    templ_path = os.path.join(
+                        target_dir, f"{class_name}.templ")
                     with open(templ_path, "w") as templ_file:
                         templ_file.write(templ_content)
 
 
 # Example usage:
-directory_path = "../src/solid"
+directory_path = "../src/outline/arrows"
 parse_svg_files(directory_path)
